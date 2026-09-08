@@ -45,3 +45,4 @@ derby.log
 
 # Databricks local configuration
 .databricks/
+infrastructure/main.json
