@@ -1,6 +1,14 @@
 param location string
 param storageAccountName string
 
+@description('Microsoft Entra object ID of the identity allowed to upload data.')
+param uploaderPrincipalObjectId string
+
+var storageBlobDataContributorRoleDefinitionId = subscriptionResourceId(
+  'Microsoft.Authorization/roleDefinitions',
+  'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+)
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-08-01' = {
   name: storageAccountName
   location: location
@@ -43,6 +51,20 @@ resource goldContainer 'Microsoft.Storage/storageAccounts/blobServices/container
   name: 'gold'
   properties: {
     publicAccess: 'None'
+  }
+}
+
+resource uploaderRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(
+    storageAccount.id,
+    uploaderPrincipalObjectId,
+    storageBlobDataContributorRoleDefinitionId
+  )
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: storageBlobDataContributorRoleDefinitionId
+    principalId: uploaderPrincipalObjectId
+    principalType: 'User'
   }
 }
 

@@ -3,6 +3,9 @@ targetScope = 'subscription'
 param location string = 'francecentral'
 param resourceGroupName string = 'rg-olist-lakehouse-dev'
 
+@description('Microsoft Entra object ID of the identity allowed to upload data.')
+param uploaderPrincipalObjectId string
+
 var storageAccountName = 'stolist${uniqueString(subscription().id, resourceGroupName)}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -21,6 +24,7 @@ module storage './storage.bicep' = {
   params: {
     location: location
     storageAccountName: storageAccountName
+    uploaderPrincipalObjectId: uploaderPrincipalObjectId
   }
 }
 
