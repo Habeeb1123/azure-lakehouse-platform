@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: mart_daily_sales
+    description: Daily sales and fulfilment KPI mart for Olist orders.
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_dim_date')
+                field: date_key
+
+      - name: order_date
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_count
+        data_tests:
+          - not_null
+
+  - name: mart_product_category_performance
+    description: Product category sales and revenue performance mart.
+    columns:
+      - name: product_category
+        data_tests:
+          - not_null
+          - unique
+
+      - name: product_count
+        data_tests:
+          - not_null
+
+      - name: items_sold
+        data_tests:
+          - not_null
+
+      - name: total_line_value
+        data_tests:
+          - not_null
+
+  - name: mart_seller_performance
+    description: Seller-level sales and revenue performance mart.
+    columns:
+      - name: seller_id
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_dim_sellers')
+                field: seller_id
+
+      - name: items_sold
+        data_tests:
+          - not_null
+
+      - name: order_count
+        data_tests:
+          - not_null
+
+      - name: total_line_value
+        data_tests:
+          - not_null

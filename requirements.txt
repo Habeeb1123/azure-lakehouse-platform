@@ -3,3 +3,4 @@ pyarrow
 pytest
 azure-identity
 azure-storage-file-datalake
+dbt-duckdb==1.11.0

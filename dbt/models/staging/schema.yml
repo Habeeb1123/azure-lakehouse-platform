@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: stg_dim_customers
+    description: Customer dimension from the Gold layer.
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: stg_dim_date
+    description: Calendar date dimension from the Gold layer.
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+          - unique
+
+  - name: stg_dim_products
+    description: Product dimension from the Gold layer.
+    columns:
+      - name: product_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: stg_dim_sellers
+    description: Seller dimension from the Gold layer.
+    columns:
+      - name: seller_id
+        data_tests:
+          - not_null
+          - unique
+
+  - name: stg_fact_orders
+    description: Order-level fact table from the Gold layer.
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_dim_customers')
+                field: customer_id
+
+      - name: order_purchase_date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_dim_date')
+                field: date_key
+
+  - name: stg_fact_order_items
+    description: Order-item-level fact table from the Gold layer.
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fact_orders')
+                field: order_id
+
+      - name: order_item_id
+        data_tests:
+          - not_null
+
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_dim_products')
+                field: product_id
+
+      - name: seller_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_dim_sellers')
+                field: seller_id

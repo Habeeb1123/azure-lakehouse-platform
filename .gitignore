@@ -46,3 +46,11 @@ derby.log
 # Databricks local configuration
 .databricks/
 infrastructure/main.json
+
+# dbt generated files
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/*.duckdb
+dbt/*.duckdb.wal
+dbt/.user.yml
