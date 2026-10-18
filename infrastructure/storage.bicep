@@ -4,6 +4,9 @@ param storageAccountName string
 @description('Microsoft Entra object ID of the identity allowed to upload data.')
 param uploaderPrincipalObjectId string
 
+@description('Microsoft Entra object ID of the Azure Data Factory managed identity.')
+param dataFactoryPrincipalObjectId string
+
 var storageBlobDataContributorRoleDefinitionId = subscriptionResourceId(
   'Microsoft.Authorization/roleDefinitions',
   'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
@@ -65,6 +68,20 @@ resource uploaderRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04
     roleDefinitionId: storageBlobDataContributorRoleDefinitionId
     principalId: uploaderPrincipalObjectId
     principalType: 'User'
+  }
+}
+
+resource dataFactoryRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(
+    storageAccount.id,
+    dataFactoryPrincipalObjectId,
+    storageBlobDataContributorRoleDefinitionId
+  )
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: storageBlobDataContributorRoleDefinitionId
+    principalId: dataFactoryPrincipalObjectId
+    principalType: 'ServicePrincipal'
   }
 }
 

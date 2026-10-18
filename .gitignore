@@ -54,3 +54,4 @@ dbt/dbt_packages/
 dbt/*.duckdb
 dbt/*.duckdb.wal
 dbt/.user.yml
+infrastructure/datafactory.json

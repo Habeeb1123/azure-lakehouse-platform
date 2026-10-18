@@ -7,6 +7,7 @@ param resourceGroupName string = 'rg-olist-lakehouse-dev'
 param uploaderPrincipalObjectId string
 
 var storageAccountName = 'stolist${uniqueString(subscription().id, resourceGroupName)}'
+var dataFactoryName = 'adfolist${uniqueString(subscription().id, resourceGroupName)}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -18,6 +19,15 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   }
 }
 
+module dataFactory './datafactory.bicep' = {
+  name: 'deployOlistDataFactory'
+  scope: resourceGroup
+  params: {
+    location: location
+    dataFactoryName: dataFactoryName
+  }
+}
+
 module storage './storage.bicep' = {
   name: 'deployOlistStorage'
   scope: resourceGroup
@@ -25,8 +35,11 @@ module storage './storage.bicep' = {
     location: location
     storageAccountName: storageAccountName
     uploaderPrincipalObjectId: uploaderPrincipalObjectId
+    dataFactoryPrincipalObjectId: dataFactory.outputs.principalId
   }
 }
 
 output resourceGroupName string = resourceGroup.name
 output storageAccountName string = storage.outputs.storageAccountName
+output dataFactoryName string = dataFactory.outputs.dataFactoryName
+output dataFactoryPrincipalId string = dataFactory.outputs.principalId
