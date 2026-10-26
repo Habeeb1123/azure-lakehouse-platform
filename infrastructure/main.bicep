@@ -39,6 +39,15 @@ module storage './storage.bicep' = {
   }
 }
 
+module adfStorageLink './adf-storage-link.bicep' = {
+  name: 'deployOlistAdlsLinkedService'
+  scope: resourceGroup
+  params: {
+    dataFactoryName: dataFactory.outputs.dataFactoryName
+    storageAccountName: storage.outputs.storageAccountName
+  }
+}
+
 output resourceGroupName string = resourceGroup.name
 output storageAccountName string = storage.outputs.storageAccountName
 output dataFactoryName string = dataFactory.outputs.dataFactoryName
