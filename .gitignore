@@ -55,3 +55,5 @@ dbt/*.duckdb
 dbt/*.duckdb.wal
 dbt/.user.yml
 infrastructure/datafactory.json
+infrastructure/adf-pipeline.json
+infrastructure/adf-storage-link.json
