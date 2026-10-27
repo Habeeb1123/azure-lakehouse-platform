@@ -3,5 +3,5 @@ olist_analytics:
   outputs:
     dev:
       type: duckdb
-      path: 'dbt/olist_analytics.duckdb'
+      path: 'olist_analytics.duckdb'
       threads: 4
