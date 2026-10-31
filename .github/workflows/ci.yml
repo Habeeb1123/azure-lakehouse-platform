@@ -37,13 +37,16 @@ jobs:
           python tests/create_dbt_fixtures.py
 
       - name: Validate dbt project
+        working-directory: dbt
         run: |
-          dbt parse --project-dir dbt --profiles-dir dbt
+          dbt parse --profiles-dir .
 
       - name: Run dbt models
+        working-directory: dbt
         run: |
-          dbt run --project-dir dbt --profiles-dir dbt
+          dbt run --profiles-dir .
 
       - name: Run dbt data tests
+        working-directory: dbt
         run: |
-          dbt test --project-dir dbt --profiles-dir dbt
+          dbt test --profiles-dir .
