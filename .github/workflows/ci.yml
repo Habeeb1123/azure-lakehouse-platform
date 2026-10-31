@@ -32,6 +32,18 @@ jobs:
         run: |
           python -m pytest -q
 
+      - name: Create synthetic Gold Parquet fixtures
+        run: |
+          python tests/create_dbt_fixtures.py
+
       - name: Validate dbt project
         run: |
           dbt parse --project-dir dbt --profiles-dir dbt
+
+      - name: Run dbt models
+        run: |
+          dbt run --project-dir dbt --profiles-dir dbt
+
+      - name: Run dbt data tests
+        run: |
+          dbt test --project-dir dbt --profiles-dir dbt
